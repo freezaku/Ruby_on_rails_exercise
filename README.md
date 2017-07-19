@@ -2,7 +2,7 @@ Problem Record Whhen Learning Ruby on Rails
 ==========================
 ##### Ruby on Rails 5 Essential Training: https://www.lynda.com/Ruby-Rails-tutorials/Ruby-Rails-5-Essential-Training/500551-2.html
 
-##### Notice: Record every problems when i learned ruby on rails. I hope my experience may help you learning ruby on rails better.
+##### Notice: Record every problem when i learned ruby on rails. I hope my experience can help you to learn ruby on rails better.
 
 ### 1. Get Started
 
