@@ -1,4 +1,4 @@
-Problem Record Whhen Learning Ruby on Rails
+Problem Records When Learning Ruby on Rails
 ==========================
 ##### Ruby on Rails 5 Essential Training: https://www.lynda.com/Ruby-Rails-tutorials/Ruby-Rails-5-Essential-Training/500551-2.html
 
