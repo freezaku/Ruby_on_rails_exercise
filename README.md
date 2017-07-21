@@ -160,3 +160,32 @@ Problem Records When Learning Ruby on Rails
 	subject = Subject.find(3)
 	subject.destroy
 	This record will be deleted from database
+
+#### (6) Find records
+##### (a) Three ways to find records
+	aa) subject = Subject.find(1)
+	bb) subject = Subject.find_by_name("Initial Subject")
+	cc) subjects = Subject.all
+
+#### (7) Query methods: Condidtions
+##### (a) Three ways to construct query by using where.
+	aa) subject = Subject.where(:visible => true)
+	bb) subject = Subject.where("visible = true")
+	cc) subject = Subject.where(["visible = ?", true])
+
+#### (8) Query methods: Order, limit, and offset
+##### (a) Different ways to use these methods.
+	aa) subjects = Subject.order(:position)
+	bb) subjects = Subject.order("position ASC")
+	cc) subjects = Subject.limit(1).offset(2)
+
+#### (9) Named scopes
+##### (a) How to use named scope?
+	In app/models/subject.rb, we can define some named scopes, these variable can be used in rails console. eg:
+	scope :visible, lambda { where(:visible => true) }
+  	scope :invisible, lambda { where(:visible => false) }
+  	scope :sorted, lambda { order("position ASC") }
+  	scope :newest_first, lambda { order("created_at DESC") }
+  	scope :serach, lambda { |query| where(["name LIKE ?", "%#{query}%"])}
+  	in rails console, we can use like this:
+  	Subject.invisible
