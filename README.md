@@ -92,3 +92,71 @@ Problem Records When Learning Ruby on Rails
 	cc) In hello.html.erb, display this paramters:
 	ID: <%= @id %>
 	ID: <%= params[:id] %>
+
+### 3. Datebase and migration
+#### (1) Generate migrations
+##### (a) the line to generate a migration.
+	rails generate migration DoNothingYet
+
+#### (2) Generate models
+##### (a) How to generate a model and add column in table.
+	aa) rails generate model User,
+		get an xxx_create_users.rb in db/migrate
+	bb) t.column "first_name", :string, :limit => 25
+##### (b) The relationship between database and rails
+	database = application
+	table = model
+	column = attribute of model
+
+#### (3) Run migration
+##### (a) Run "rails db:migrate" fail and get error.
+	Forget to start mysql server.
+
+##### (b) Basic operation of mysql.
+	aa) rails -u rails_user -p simple_cms_development
+	bb) SHOW TABLES;
+	cc) SHOW FIELDS FROM users;
+
+##### (c) How to down/up the migration
+	down: rails db:migrate VERSION=0;
+	use 'rails db:migrate:status' to find the version you want to up;
+	up: rails db:migrate VERSION=...;
+	schema file will keep track the version
+
+### 3. Models and ActiveRecord
+#### （1）Mdoel naming
+##### (a) what is the relationship between files, classes and tables.
+	These names should be sync, for example:
+	file name: admin_user.rb
+	classe name: class AdminUser < ApplicationRecord
+	table name: admin_users
+
+#### (2) The Rails console
+##### (a) How to use rails console.
+	Use 'rails console' to access rails console.
+	Then we can use activerecord of the table, eg:
+	subject = Subject.new
+	subject.name = 'test'
+
+#### (3) Create record
+##### (a) difference between new and create.
+	aa) subject = Subject.new(:name => "First Subject", position: 1, visible: true, created_at: nil, updated_at: nil)
+	it does not save automatically
+	bb) subject = Subject.create(:name => "Second Subject", :position => 2)
+	it save the record automatically
+
+#### (4) Update record 
+##### (a) two ways of updating record
+	aa) subject = Subject.find(1)
+		subject.name = "Initial Subject"
+		subject.save
+	it does not save automatically
+	bb) subject = Subject.find(2)
+		subject.update_attributes(:name => "Next Subject", :visible => true)
+	it save the record automatically
+
+#### (5) Delete record
+##### (a) How to delete a record
+	subject = Subject.find(3)
+	subject.destroy
+	This record will be deleted from database
