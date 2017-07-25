@@ -43,7 +43,7 @@ Problem Records When Learning Ruby on Rails
 ##### (a) How to set default route?
 	get ':controller(/:action(/:id))'
 ##### (b) How to set default route?
-	root 'demo#index', tells which controller and action should rout to.
+	root 'demo#index', tells which controller and action should route to.
 
 ### 2. Controllers, Views, and Dynamic Content
 #### (1) Render a template
@@ -123,7 +123,7 @@ Problem Records When Learning Ruby on Rails
 	up: rails db:migrate VERSION=...;
 	schema file will keep track the version
 
-### 3. Models and ActiveRecord
+### 4. Models and ActiveRecord
 #### （1）Mdoel naming
 ##### (a) what is the relationship between files, classes and tables.
 	These names should be sync, for example:
@@ -189,3 +189,88 @@ Problem Records When Learning Ruby on Rails
   	scope :serach, lambda { |query| where(["name LIKE ?", "%#{query}%"])}
   	in rails console, we can use like this:
   	Subject.invisible
+
+### 5. Associations
+#### (1)One-to-one associations
+##### (a) How to build one-to-one associations.
+	in subjec.rb: has_one :page
+	in page.rb: belongs_to :subject
+	subject = Subject.find(1)
+	first_page = Page.new(...)
+	subject.page = first_page
+##### (b) How to cancel one-to-one associations.
+	subject.page = nil
+	subject.page.destroy
+
+#### (2) One-to-Many Associations
+##### (a) How to build one-to-many associations.
+		in subject.rb: has_many :pages
+		in page.rb: belongs_to :subject
+		subject.pages << first_page
+		subject.pages << second_page
+##### (b) How to cancel one-to-many associations.
+		subject.pages.delete(second_page)
+
+#### (3) Many-to-many associations: Simple
+##### (a) How to build many-to-many associations
+	aa) Create a join table
+	generate migration CreateAdminUsersPagesJoin
+	in /dbmigrate file: 
+		class CreateAdminUsersPagesJoin < ActiveRecord::Migration[5.1]
+		  def up
+		    create_table :admin_users_pages, :id => false do |t|
+		      t.integer "admin_user_id"
+		      t.integer "page_id"
+		    end
+		    add_index("admin_users_pages", ["admin_user_id", "page_id"])
+		  end
+
+		  def down
+		    drop_table :admin_users_pages
+		  end
+
+		end
+	the name of the page is admin_users_pages
+	bb) set relationship
+	in admin_user.rb: has_and_belongs_to_many :pages
+	in page.rb: has_and_belongs_to_many :admin_users
+	cc) build relationship
+	me.pages << first_page
+
+#### (4) Many-to-many associations: Rich
+##### (a) How to build many-to-many associations use another table(model).
+	aa) rails generate model SectionEdit
+	bb) in db/migrate file:
+		class CreateSectionEdits < ActiveRecord::Migration[5.1]
+
+		  def up
+		    create_table :section_edits do |t|
+		      t.integer "admin_user_id"
+		      t.integer "section_id"
+		      t.string "summary"
+		      t.timestamps
+		    end
+		    add_index("section_edits", ['admin_user_id', 'section_id'])
+		  end
+
+		  def down
+		    drop_table :section_edits
+		  end
+
+		end
+	cc) rails db:migrate
+	dd) in admin_user.rb:
+		has_many :section_edits
+		in section.rb:
+		has_many :section_edits
+		in section_edit.rb
+		belongs_to :admin_user
+  		belongs_to :section
+  	ee) edit = SectionEdit.new(:summary => "test edit", :admin_user => me, :section => section)
+
+#### (5) Traverse a rich association
+##### (a) How to traverse a rich association
+	by using through
+	aa) in admin_user.rb: has_many :sections, :through => :section_edits
+	bb) in section.rb: has_many :admin_users, :through => :section_edits
+	cc) me.sections
