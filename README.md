@@ -274,3 +274,61 @@ Problem Records When Learning Ruby on Rails
 	aa) in admin_user.rb: has_many :sections, :through => :section_edits
 	bb) in section.rb: has_many :admin_users, :through => :section_edits
 	cc) me.sections
+
+### 6. CRUD, REST, and Resourceful Routes
+#### (1) CRUD
+	(a) Create a controller with CRUD action.
+	rails generate controller Subjects index show new edit delete
+	aa) create a controller named SubjectController
+		in this file, it added some actions:
+		def index
+  		end
+  		...
+  	bb) create a view folder named subjects
+  		this folder contains this correspoding views such as delete.html.erb ...
+  	cc) create corresponding routes in routes.rb
+  		such as: get 'subjects/delete'
+
+#### (2) REST
+##### (a) REST HTTP Verbs
+	index - get
+	show - get
+	new - get
+	create - post
+	edit - get
+	update - patch
+	delete - get
+	destroy - delete
+
+#### (3) Resourceful routes
+##### (a) How to define and show resourceful routs
+	delete get 'subjects/delete' and add code:
+	resources :subject do
+		member do
+			get :delete
+		end
+	end
+	this block of code add delete action
+
+### 7. Controllers adn CRUD
+#### (1) Read action: Index
+##### (a) All the parts of MVC architecture.
+	aa) in url use /subjects
+	bb) Rails took the url and determine to use resourceful routes SubjectsController#index
+	cc) in subjects_controller, in index action, it operate some operations, the default render it to 'index.html.erb'
+	dd) in 'index.html.erb' view, show corresponding info
+	ee) the view sends back to the browser
+
+#### (2) Read action: Show
+##### (a) How to use helper to implement subject resourceful routes.
+	aa) index.html.erb
+		<%= link_to("Show", subject_path(subject), :class => 'action show') %>
+		or
+		<%= link_to("Show", {:controller => "subjects", action => "show", :id => "subject.id"}, :class => 'action show') %>
+	bb) subjects_controller.rb
+		def show
+    		@subject = Subject.find(params[:id])
+  		end
+  		use instance variable and get parameter from url
+  	cc) show.html.erb
+  		use @subject to use the instance variable
